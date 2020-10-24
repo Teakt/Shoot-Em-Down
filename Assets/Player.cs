@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     private Camera m_MainCamera;
     [SerializeField] private float m_VerticalSpeed;
     [SerializeField] private float m_HorizontalSpeed;
+    private float m_width = Screen.width;
+    private float m_height = Screen.height;
 
     public float gravity = 20.0f;
 
@@ -57,14 +59,30 @@ public class Player : MonoBehaviour
         //{
         // We are grounded, so recalculate
         // move direction directly from axes
-        if(screenPos.x < m_MainCamera.pixelWidth && screenPos.x > 0)
+        if (Input.GetKey(KeyCode.RightArrow) == true)
         {
-            transform.position = transform.position + new Vector3(horizontalInput * m_HorizontalSpeed * Time.deltaTime, 0, verticalInput * m_VerticalSpeed * Time.deltaTime); // we use X and Z cause thats how the camera looks at the ground
-            Debug.Log("Out of bounds");
+            if (screenPos.x > m_width)
+                return;
+            this.transform.position = new Vector3(transform.position.x + (m_HorizontalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
         }
-       // transform.position =  new Vector3( Mathf.Clamp(screenPos.x, -Screen.width / 2, Screen.width / 2), transform.position.y, Mathf.Clamp(transform.position.z, 0, m_MainCamera.pixelHeight) );
-
-       
+        if (Input.GetKey(KeyCode.LeftArrow) == true)
+        {
+            if (screenPos.x < 0)
+                return;
+            this.transform.position = new Vector3(transform.position.x - (m_HorizontalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
+        }
+        if (Input.GetKey(KeyCode.UpArrow) == true)
+        {
+            if (screenPos.y > m_height)
+                return;
+            this.transform.position = new Vector3(transform.position.x, transform.position.y + (m_VerticalSpeed * Time.deltaTime), transform.position.z);
+        }
+        if (Input.GetKey(KeyCode.DownArrow) == true)
+        {
+            if (screenPos.y < 0)
+                return;
+            this.transform.position = new Vector3(transform.position.x, transform.position.y - (m_VerticalSpeed * Time.deltaTime), transform.position.z);
+        }
         Debug.Log("target is " + screenPos.x + " pixels from the left" + Screen.width);
             Debug.Log("target is " + screenPos.y + " pixels from the bottom");
 
