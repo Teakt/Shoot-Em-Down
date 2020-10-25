@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Diagnostics;
+using System;
+
+
 
 public class Player : MonoBehaviour
 {
@@ -9,25 +13,31 @@ public class Player : MonoBehaviour
 
     private Vector3 moveDirection = Vector3.zero;
 
-    [SerializeField]
-    private Camera m_MainCamera;
+
+    [SerializeField] private Camera m_MainCamera;
     [SerializeField] private float m_VerticalSpeed;
     [SerializeField] private float m_HorizontalSpeed;
-    private float m_width = Screen.width;
-    private float m_height = Screen.height;
+    [SerializeField] private float m_width = Screen.width;
+    [SerializeField] private float m_height = Screen.height;
+    [SerializeField] private float rate_of_fire;
 
-    public float gravity = 20.0f;
+    public GameObject bullets_prefab;
 
-
-    private float objectWidth;
-    private float objectHeight;
-    private Vector2 screenBounds;
+    Stopwatch stopWatch = new Stopwatch();
 
 
 
+
+    void Awake()
+    {
+        stopWatch.Start();
+        m_MainCamera = Camera.main;
+    }
     // Start is called before the first frame update
     void Start()
     {
+       
+       
         characterController = GetComponent<CharacterController>();
         
         
@@ -40,7 +50,6 @@ public class Player : MonoBehaviour
 
        
     }
-
 
     void PlayerControl()
     {
@@ -83,8 +92,25 @@ public class Player : MonoBehaviour
                 return;
             this.transform.position = new Vector3(transform.position.x, transform.position.y - (m_VerticalSpeed * Time.deltaTime), transform.position.z);
         }
-        Debug.Log("target is " + screenPos.x + " pixels from the left" + Screen.width);
-            Debug.Log("target is " + screenPos.y + " pixels from the bottom");
+        if (Input.GetKey(KeyCode.Space) == true)
+        {
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
+
+            //print(ts.TotalSeconds);
+            double bullet_time = ts.TotalSeconds;
+
+            if (bullet_time > 1)
+            {
+                stopWatch.Reset();
+                stopWatch.Start();
+                Instantiate(bullets_prefab, new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), Quaternion.identity);
+            }
+            else
+                stopWatch.Start();
+            //this.transform.position = new Vector3(transform.position.x, transform.position.y - (m_VerticalSpeed * Time.deltaTime), transform.position.z);
+        }
+
 
         //}
 
@@ -95,8 +121,8 @@ public class Player : MonoBehaviour
 
         // Move the controller
 
-       
-        
 
-    }
+
+
+    } // COntrols Player's movements
 }
