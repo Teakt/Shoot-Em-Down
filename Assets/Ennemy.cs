@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ennemy : MonoBehaviour
+public class Ennemy : Entity
 {
     [SerializeField]
     private GameObject target;
@@ -13,13 +13,15 @@ public class Ennemy : MonoBehaviour
     [SerializeField] private float m_height = Screen.height;
 
     // Start is called before the first frame update
-    void Awake()
+    public override void Awake()
     {
+        base.Awake();
+        
         m_MainCamera = Camera.main;
     }
     void Start()
     {
-       
+        //Debug.Log("Ennemy current HP : " + current_HP);
     }
 
     // Update is called once per frame
@@ -38,5 +40,31 @@ public class Ennemy : MonoBehaviour
             Destroy(gameObject, 1f);
         if (screenPos.y > 0)
             this.transform.position = new Vector3(transform.position.x, transform.position.y  - (m_verticalSpeed * Time.deltaTime), transform.position.z); // Goes toward down direction
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Debug-draw all contact points and normals
+        if (collision.rigidbody.tag == "Player") // the ennemy crashes if he collides with player
+        {
+            Destroy(this.gameObject);
+        }
+
+        if (collision.rigidbody.tag == "Bullet") // the ennemy crashes if he collides with player
+        {
+            this.loseHP(1);
+            Debug.Log("Ennemy HP : " + current_HP);
+        }
+
+        if (current_HP <= 0)  // If the player has nno HP , he dies 
+        {
+            Destroy(this.gameObject);
+        }
+
+
+        /* // Play a sound if the colliding objects had a big impact.
+         if (collision.relativeVelocity.magnitude > 2)
+             audioSource.Play();
+             */
     }
 }

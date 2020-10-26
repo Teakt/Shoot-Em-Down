@@ -13,6 +13,11 @@ public class Bullet : MonoBehaviour
 
     private Camera m_MainCamera;
 
+    public delegate void OnBulletHitEvent(int score_amount);
+    public event OnBulletHitEvent OnBulletHit;
+
+    public int score { get; set; } // score to update with Susribe / Listener Scripts system 
+
     void Awake()
     {
         m_MainCamera = Camera.main;
@@ -21,7 +26,7 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        score = 0; 
     }
 
     // Update is called once per frame
@@ -41,4 +46,35 @@ public class Bullet : MonoBehaviour
         if (screenPos.y < m_height)
             this.transform.position = new Vector3(transform.position.x, transform.position.y + (m_verticalSpeed  * Time.deltaTime), transform.position.z);
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Debug-draw all contact points and normals
+        if (collision.rigidbody.tag == "Ennemy")
+        {
+            //UnityEngine.Debug.Log(collision.rigidbody.tag);
+            score += 100;
+            if (OnBulletHit != null)
+            {
+                OnBulletHit(score);
+            }
+            Destroy(this.gameObject);
+        }
+
+        
+
+
+        /* // Play a sound if the colliding objects had a big impact.
+         if (collision.relativeVelocity.magnitude > 2)
+             audioSource.Play();
+             */
+    }
+    /*
+    public void BulletHit()
+    {
+        FindObjectOfType<Player>().score+= 50;
+        UnityEngine.Debug.Log("Ennemy Hit SCORE GOES UP : " + FindObjectOfType<Player>().score + "!");
+    }
+    */
+
 }

@@ -6,7 +6,7 @@ using System;
 
 
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
 
     CharacterController characterController;
@@ -26,12 +26,20 @@ public class Player : MonoBehaviour
     Stopwatch stopWatch = new Stopwatch();
 
 
+    public AudioSource audioSource;
 
+     
 
-    void Awake()
+    
+
+    public int score_Player { get; set; }
+
+    public override void Awake()
     {
+        base.Awake();
         stopWatch.Start();
         m_MainCamera = Camera.main;
+        score_Player = 0;
     }
     // Start is called before the first frame update
     void Start()
@@ -39,8 +47,8 @@ public class Player : MonoBehaviour
        
        
         characterController = GetComponent<CharacterController>();
-        
-        
+        audioSource = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -100,11 +108,12 @@ public class Player : MonoBehaviour
             //print(ts.TotalSeconds);
             double bullet_time = ts.TotalSeconds;
 
-            if (bullet_time > 1)
+            if (bullet_time > rate_of_fire)
             {
                 stopWatch.Reset();
                 stopWatch.Start();
-                Instantiate(bullets_prefab, new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), Quaternion.identity);
+                GameObject instanciated_prefab = Instantiate(bullets_prefab, new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), Quaternion.identity);
+                instanciated_prefab.GetComponent<Bullet>().OnBulletHit += OnBulletHitPlayer; // suscribe to Bullet event OnHitBulelt
             }
             else
                 stopWatch.Start();
@@ -112,17 +121,40 @@ public class Player : MonoBehaviour
         }
 
 
-        //}
-
-        // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
-        // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
-        // as an acceleration (ms^-2)
-        //moveDirection.y -= gravity * Time.deltaTime;
-
-        // Move the controller
+        
 
 
 
+    }
 
-    } // COntrols Player's movements
+    void OnCollisionEnter(Collision collision)
+    {
+        // Debug-draw all contact points and normals
+        if (collision.rigidbody.tag == "Ennemy")
+        {
+            UnityEngine.Debug.Log(collision.rigidbody.tag);
+           // Destroy(collision.gameObject); // Ennmey dies while crashing into the player
+            //current_HP -= 1;
+            this.loseHP(1);
+            UnityEngine.Debug.Log("Player Current HP : " + current_HP);
+        }
+
+        if (current_HP <= 0)  // If the player has nno HP , he dies 
+        {
+            Destroy(this.gameObject); 
+        }
+
+
+       /* // Play a sound if the colliding objects had a big impact.
+        if (collision.relativeVelocity.magnitude > 2)
+            audioSource.Play();
+            */
+    }
+
+    private void OnBulletHitPlayer(int score)
+    {
+        score_Player += score;  
+        UnityEngine.Debug.Log("Total score : " + score_Player + "!");
+    }
+
 }
