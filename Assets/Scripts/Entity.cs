@@ -18,6 +18,11 @@ public class  Entity : MonoBehaviour
         }
     }
 
+    protected void setHP(int new_hp) //  et d’une propriété pour les PVs actuelles de l’entité, accessible publiquement en lecture, mais protégée en écriture.
+    {
+        _current_HP = new_hp;
+    }
+
     protected void loseHP(int lost_hp)
     {
         _current_HP -= lost_hp;
@@ -27,7 +32,11 @@ public class  Entity : MonoBehaviour
     {
         _current_HP = max_HP;
     }
+    
+
 }
+
+
 
 
 
