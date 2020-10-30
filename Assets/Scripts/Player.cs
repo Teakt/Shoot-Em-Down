@@ -41,6 +41,10 @@ public class Player : Entity
 
     //public int HP { get; set; } // Health Points of the player 
 
+    /*-----------------------------------------------------------------------------*/
+    public delegate void OnScoreChangeEvent(int score);
+    public event OnScoreChangeEvent OnScoreChange;
+
     public override void Awake()
     {
         base.Awake();
@@ -140,14 +144,14 @@ public class Player : Entity
         // Debug-draw all contact points and normals
         if (collision.rigidbody.tag == "Ennemy")
         {
-            UnityEngine.Debug.Log(collision.rigidbody.tag);
+            //UnityEngine.Debug.Log(collision.rigidbody.tag);
             // Destroy(collision.gameObject); // Ennmey dies while crashing into the player
             //current_HP -= 1;
             if (OnHPChange != null)
             {
                 OnHPChange(1);
             }
-            this.setHP(this.current_HP - 1);
+            this.loseHP(1) ;
 
             UnityEngine.Debug.Log("Player Current HP : " + current_HP);
         }
@@ -166,13 +170,22 @@ public class Player : Entity
 
     private void OnBulletHitPlayer(int score)
     {
-        score_Player += score;  
+        score_Player += score;
+        if (OnScoreChange != null)
+        {
+            OnScoreChange(score);
+        }
         UnityEngine.Debug.Log("Total score : " + score_Player + "!");
     }
 
     public int GetHP() // Egalement, il sera nécessaire de créer une propriété public qui permet de récupérer la valeur max des PVs du vaisseau. 
     {
         return current_HP;
+    }
+
+    public int GetScore() //  et de même pour OnScoreChange avec le score. 
+    {
+        return score_Player;
     }
 
 }

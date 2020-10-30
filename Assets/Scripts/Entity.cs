@@ -28,9 +28,16 @@ public class  Entity : MonoBehaviour
         _current_HP -= lost_hp;
     }
 
+    
+
     public virtual void Awake()
     {
         _current_HP = max_HP;
+    }
+
+    public int  GetMaxHP() // Allows Entity to access Max HP value 
+    {
+        return max_HP;
     }
     
 
