@@ -37,7 +37,7 @@ public class Ennemy : Entity
 
         //System.Console.WriteLine("balle.y = ", screenPos.y, ", position max_ecran = ", m_height);
         if (screenPos.y <0 )
-            Destroy(gameObject, 1f);
+            Destroy(gameObject, 0f);
         if (screenPos.y > 0)
             this.transform.position = new Vector3(transform.position.x, transform.position.y  - (m_verticalSpeed * Time.deltaTime), transform.position.z); // Goes toward down direction
     }
