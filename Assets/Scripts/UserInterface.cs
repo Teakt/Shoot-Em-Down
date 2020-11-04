@@ -29,7 +29,7 @@ public class UserInterface : MonoBehaviour
         player.OnHPChange += HandlingGameOver;
         player.OnScoreChange += HandlingScoreChange;
 
-        playAgain_button.onClick.AddListener(ResetLevel);
+        playAgain_button.onClick.AddListener(GameManager.Instance.ResetLevel);
 
     }
     void Start()
@@ -67,9 +67,13 @@ public class UserInterface : MonoBehaviour
         }
     }
 
+
+    /*
     public void ResetLevel()
     {
-        Scene scene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(scene.name);
+        //Scene scene = SceneManager.GetActiveScene();
+        //SceneManager.LoadScene(scene.name);
+        GameManager.Instance.ResetLevel();
     }
+    */
 }
