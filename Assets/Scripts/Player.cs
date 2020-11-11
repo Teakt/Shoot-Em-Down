@@ -56,7 +56,8 @@ public class Player : Entity
     // Start is called before the first frame update
     void Start()
     {
-
+        m_width = Screen.width;
+        m_height = Screen.height;
         
         characterController = GetComponent<CharacterController>();
         audioSource = GetComponent<AudioSource>();
@@ -90,6 +91,7 @@ public class Player : Entity
         // move direction directly from axes
         if (Input.GetKey(KeyCode.RightArrow) == true)
         {
+            UnityEngine.Debug.Log("Width max:" + m_width);
             if (screenPos.x > m_width)
                 return;
             this.transform.position = new Vector3(transform.position.x + (m_HorizontalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
