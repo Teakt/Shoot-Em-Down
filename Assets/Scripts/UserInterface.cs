@@ -14,6 +14,9 @@ public class UserInterface : MonoBehaviour
     [SerializeField] private Text score_text;
     [SerializeField] private Slider hp_bar;
     [SerializeField] private Player player;
+
+    [SerializeField] private GameObject pausePanel; 
+
    
     void Awake()
     {
@@ -30,6 +33,7 @@ public class UserInterface : MonoBehaviour
         player.OnScoreChange += HandlingScoreChange;
 
         playAgain_button.onClick.AddListener(GameManager.Instance.ResetLevel);
+
 
     }
     void Start()
@@ -75,5 +79,15 @@ public class UserInterface : MonoBehaviour
         //SceneManager.LoadScene(scene.name);
         GameManager.Instance.ResetLevel();
     }
+
+
+    
+
     */
+
+
+  public void TogglePausePanel(bool pause)
+    {
+        pausePanel.SetActive(pause);
+    }
 }
