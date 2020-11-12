@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class UserInterface : MonoBehaviour
+public class UserInterface : MonoBehaviourSingleton<UserInterface>
 {
 
     //private Slider HP_bar_UI;
@@ -15,10 +15,10 @@ public class UserInterface : MonoBehaviour
     [SerializeField] private Slider hp_bar;
     [SerializeField] private Player player;
 
-    [SerializeField] private GameObject pausePanel; 
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private Button pause_button;
 
-   
-    void Awake()
+    protected override void Awake()
     {
         /*
         HP_bar_UI = GetComponentInChildren<Slider>();
@@ -33,6 +33,7 @@ public class UserInterface : MonoBehaviour
         player.OnScoreChange += HandlingScoreChange;
 
         playAgain_button.onClick.AddListener(GameManager.Instance.ResetLevel);
+        pause_button.onClick.AddListener(GameManager.Instance.Play);
 
 
     }
@@ -86,8 +87,9 @@ public class UserInterface : MonoBehaviour
     */
 
 
-  public void TogglePausePanel(bool pause)
+    public void TogglePausePanel(bool pause)
     {
+        //if(GameManager.Instance.gameIsNotPaused)
         pausePanel.SetActive(pause);
     }
 }

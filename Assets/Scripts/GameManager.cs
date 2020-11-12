@@ -6,8 +6,23 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviourSingleton<GameManager>
 {
+    public bool gameIsNotPaused = true ;
+
+   
+    
+    private bool _gameIsNotPaused // ecriture prive pour _pause_status
+    {
+        get
+        {
+            return gameIsNotPaused;
+        }
+        set
+        {
+            gameIsNotPaused = _gameIsNotPaused;
+        }
+    }
     // Start is called before the first frame update
-    void Start()
+    protected override void Awake()
     {
         
     }
@@ -22,5 +37,22 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     {
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
+    }
+
+    public void Play() // puts the game on pause or not
+    {
+        Debug.Log("PAUSE!");
+        UserInterface.Instance.TogglePausePanel(gameIsNotPaused);
+        if (gameIsNotPaused)
+        {
+            gameIsNotPaused = false; // Game is paused 
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            gameIsNotPaused = true; // Game is paused 
+            Time.timeScale = 1f;
+        }
+        
     }
 }
