@@ -9,7 +9,7 @@ public class Ennemy : Entity
 
  
     private Camera m_MainCamera;
-    [SerializeField] private float m_verticalSpeed = 20.0f;
+    [SerializeField] private float m_verticalSpeed = 40.0f;
     [SerializeField] private float m_height = Screen.height;
 
     // Start is called before the first frame update

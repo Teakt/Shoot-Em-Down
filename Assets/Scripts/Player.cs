@@ -28,9 +28,9 @@ public class Player : Entity
 
     public AudioSource audioSource;
 
-     
+    Vector3 shootDirection;
 
-    
+
 
     public int score_Player { get; set; }
 
@@ -114,6 +114,7 @@ public class Player : Entity
                 return;
             this.transform.position = new Vector3(transform.position.x, transform.position.y - (m_VerticalSpeed * Time.deltaTime), transform.position.z);
         }
+        /*
         if (Input.GetKey(KeyCode.Space) == true)
         {
             stopWatch.Stop();
@@ -133,9 +134,41 @@ public class Player : Entity
                 stopWatch.Start();
             //this.transform.position = new Vector3(transform.position.x, transform.position.y - (m_VerticalSpeed * Time.deltaTime), transform.position.z);
         }
+        */
+        if (Input.GetMouseButtonDown(0))
+        {
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
 
 
-        
+
+            double bullet_time = ts.TotalSeconds;
+            Vector3 screenToWorldPoint_player = m_MainCamera.WorldToScreenPoint(this.transform.position);
+            screenToWorldPoint_player.z = 0.0f;
+            //UnityEngine.Debug.Log("Player pos  : " + this.transform.position + " screentoworldplayer :" + screenToWorldPoint_player);
+            //UnityEngine.Debug.Log("mouse : " + Input.mousePosition );
+            shootDirection = Input.mousePosition - screenToWorldPoint_player;
+            //UnityEngine.Debug.Log("ShootDirection : " + shootDirection);
+            shootDirection = shootDirection.normalized;
+            UnityEngine.Debug.Log("ShootDirectionNormalized : " + shootDirection);
+
+            if (bullet_time > rate_of_fire)
+            {
+                stopWatch.Reset();
+                stopWatch.Start();
+                GameObject instanciated_prefab = Instantiate(bullets_prefab, new Vector3(transform.position.x, transform.position.y , transform.position.z), Quaternion.identity);
+                instanciated_prefab.GetComponent<Bullet>().ShootWithDirection(shootDirection);
+                instanciated_prefab.GetComponent<Bullet>().OnBulletHit += OnBulletHitPlayer; // suscribe to Bullet event OnHitBulelt
+            }
+            else
+            {
+                stopWatch.Start();
+            }
+        }
+          
+
+
+
 
 
 

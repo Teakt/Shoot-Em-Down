@@ -18,9 +18,14 @@ public class Bullet : MonoBehaviour
 
     public int score { get; set; } // score to update with Susribe / Listener Scripts system 
 
+    Vector3 direction;
+
+    //bool token = false;
+
     void Awake()
     {
         m_MainCamera = Camera.main;
+        
     }
 
     // Start is called before the first frame update
@@ -33,18 +38,26 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         Move();
+        
     }
 
     void Move()
     {
 
         Vector3 screenPos = m_MainCamera.WorldToScreenPoint(this.transform.position);
-
+        this.transform.position = new Vector3(transform.position.x + direction.x * (m_verticalSpeed * Time.deltaTime), transform.position.y +  direction.y * (m_verticalSpeed * Time.deltaTime) , 0);
         //System.Console.WriteLine("balle.y = ", screenPos.y, ", position max_ecran = ", m_height);
         if (screenPos.y >= m_height)
             Destroy(gameObject, 0);
-        if (screenPos.y < m_height)
-            this.transform.position = new Vector3(transform.position.x, transform.position.y + (m_verticalSpeed  * Time.deltaTime), transform.position.z);
+        //if (screenPos.y < m_height)
+            //this.transform.position = new Vector3(transform.position.x, transform.position.y + (m_verticalSpeed  * Time.deltaTime), transform.position.z);
+            
+    }
+
+    public void ShootWithDirection(Vector3 direction)
+    {
+        this.direction = direction; 
+       
     }
 
     void OnCollisionEnter(Collision collision)

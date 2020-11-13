@@ -47,4 +47,6 @@ public class EnnemyManager : MonoBehaviour
             Instantiate(ennemy_prefab,screenTopSide, Quaternion.identity);
         }
     }
+
+   
 }
