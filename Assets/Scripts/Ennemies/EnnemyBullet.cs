@@ -64,4 +64,7 @@ public class EnnemyBullet : MonoBehaviour
         this.direction = direction;
 
     }
+
+
+
 }

@@ -11,7 +11,7 @@ public class EnnemyTypeA : Ennemy
 
 
     private Camera m_MainCamera;
-    [SerializeField] private float m_verticalSpeed ;
+    
     [SerializeField] private float m_height = Screen.height;
 
     [SerializeField] private float delay_before_teleportation;
@@ -28,12 +28,14 @@ public class EnnemyTypeA : Ennemy
         base.Awake();
         stopWatch.Start(); // For the teleportation
         m_MainCamera = Camera.main;
+
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+       
     }
 
     // Update is called once per frame
@@ -41,7 +43,10 @@ public class EnnemyTypeA : Ennemy
     {
         if(FindObjectOfType<Player>()!=null)
             target = FindObjectOfType<Player>();
-        Move();
+        if (target != null)
+        {
+            Move();
+        }
     }
 
     public override void Move()
@@ -85,12 +90,11 @@ public class EnnemyTypeA : Ennemy
     public override void Shoot()
     {
         //Shoot
-        if (target != null)
-        {
+        
             GameObject instanciated_prefab = Instantiate(ennemybullet_prefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
             Vector3 direction = target.transform.position - transform.position;
             instanciated_prefab.GetComponent<EnnemyBullet>().ShootWithDirection(direction.normalized);
-        }
+       
        
       
        
