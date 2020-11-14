@@ -363,7 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0983c54fcf300d45a02465518a0d44e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appearance_delay: 3
+  appearance_delay: 10
   ennemy_prefab: {fileID: 1904263524978809855, guid: aebc7bc0d3404dc488410a28ab0e9ab8,
     type: 3}
   ennemy_typeB: {fileID: 392196492999702934, guid: 8b56218ec537bee49810ccc3ddc481de,
@@ -2151,6 +2151,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3850382715998013375, guid: c749512c29f48b24e89b08b4e365b8f0,
+        type: 3}
+      propertyPath: appearance_delay
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c749512c29f48b24e89b08b4e365b8f0, type: 3}

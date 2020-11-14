@@ -207,7 +207,7 @@ public class Player : Entity
 
         if (current_HP <= 0)  // If the player has nno HP , he dies 
         {
-            Destroy(this.gameObject); 
+            this.gameObject.SetActive(false);
         }
 
 
