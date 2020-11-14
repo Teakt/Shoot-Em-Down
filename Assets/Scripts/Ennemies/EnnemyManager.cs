@@ -12,6 +12,7 @@ public class EnnemyManager : MonoBehaviour
     [SerializeField] private float appearance_delay;
 
     public GameObject ennemy_prefab;
+    public GameObject ennemy_typeB;
 
     [SerializeField] private Camera m_MainCamera;
     // Start is called before the first frame update
@@ -27,6 +28,9 @@ public class EnnemyManager : MonoBehaviour
         {
             IEnumerator coroutine = WaitAndSpawnEnnemy(appearance_delay);
             StartCoroutine(coroutine);
+
+            IEnumerator coroutine2 = WaitAndSpawnEnnemyB(appearance_delay);
+            StartCoroutine(coroutine2);
         }
     }
 
@@ -48,5 +52,16 @@ public class EnnemyManager : MonoBehaviour
         }
     }
 
-   
+    // every 2 seconds perform the print()
+    private IEnumerator WaitAndSpawnEnnemyB(float waitTime)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(waitTime);
+            Vector3 screenTopSide = m_MainCamera.ScreenToWorldPoint(new Vector3(UnityEngine.Random.Range(0, m_MainCamera.pixelWidth), m_MainCamera.pixelHeight, -m_MainCamera.transform.position.z));
+            Instantiate(ennemy_typeB, screenTopSide, Quaternion.identity);
+        }
+    }
+
+
 }

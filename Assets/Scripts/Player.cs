@@ -191,6 +191,20 @@ public class Player : Entity
             UnityEngine.Debug.Log("Player Current HP : " + current_HP);
         }
 
+        if (collision.rigidbody.tag == "EnnemyBullet")
+        {
+            //UnityEngine.Debug.Log(collision.rigidbody.tag);
+            // Destroy(collision.gameObject); // Ennmey dies while crashing into the player
+            //current_HP -= 1;
+            if (OnHPChange != null)
+            {
+                OnHPChange(1);
+            }
+            this.loseHP(1);
+
+            UnityEngine.Debug.Log("Player Current HP : " + current_HP);
+        }
+
         if (current_HP <= 0)  // If the player has nno HP , he dies 
         {
             Destroy(this.gameObject); 

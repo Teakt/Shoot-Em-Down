@@ -5,8 +5,8 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     //Bullet Property and The Size of the Screen
-    [SerializeField]
-    
+
+
     private float m_verticalSpeed = 20.0f;
     private float m_height = Screen.height;
     //private float m_width = Screen.width;
