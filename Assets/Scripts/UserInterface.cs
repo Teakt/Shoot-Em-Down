@@ -55,7 +55,7 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
     {
         //HP_bar_UI.value -= hp;
         hp_bar.value = player.GetHP() - hp;
-        Debug.Log("Bar value : " + hp_bar.value  + "HP PLAYER : " + player.GetHP() + "MAX HP : " + player.GetMaxHP());
+        //Debug.Log("Bar value : " + hp_bar.value  + "HP PLAYER : " + player.GetHP() + "MAX HP : " + player.GetMaxHP());
     }
 
     private void HandlingScoreChange(int score)
