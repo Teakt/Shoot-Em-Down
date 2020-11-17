@@ -116,6 +116,8 @@ MonoBehaviour:
   shooting_power: 50
   bullets_prefab: {fileID: 2787729279022944727, guid: 63e437a2d3ccbaa4c831670bbc279fe8,
     type: 3}
+  bullet_type2_prefab: {fileID: 6860315147978906571, guid: b78e2ec217cb1e64fa21d18713913d33,
+    type: 3}
   audioSource: {fileID: 0}
 --- !u!54 &4186757372208393334
 Rigidbody:
