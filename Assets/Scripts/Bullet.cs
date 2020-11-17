@@ -31,7 +31,9 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        score = 0; 
+        score = 0;
+        m_width = Screen.width;
+        m_height = Screen.height;
     }
 
     // Update is called once per frame
