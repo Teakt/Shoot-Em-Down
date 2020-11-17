@@ -55,4 +55,9 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         }
         
     }
+
+    public void PlayGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
 }

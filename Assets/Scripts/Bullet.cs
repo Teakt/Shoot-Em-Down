@@ -7,9 +7,9 @@ public class Bullet : MonoBehaviour
     //Bullet Property and The Size of the Screen
 
 
-    private float m_verticalSpeed = 20.0f;
+    private float shooting_power = 20.0f;
     private float m_height = Screen.height;
-    //private float m_width = Screen.width;
+    private float m_width = Screen.width;
 
     private Camera m_MainCamera;
 
@@ -45,18 +45,28 @@ public class Bullet : MonoBehaviour
     {
 
         Vector3 screenPos = m_MainCamera.WorldToScreenPoint(this.transform.position);
-        this.transform.position = new Vector3(transform.position.x + direction.x * (m_verticalSpeed * Time.deltaTime), transform.position.y +  direction.y * (m_verticalSpeed * Time.deltaTime) , 0);
+        this.transform.position = new Vector3(transform.position.x + direction.x * (shooting_power * Time.deltaTime), transform.position.y +  direction.y * (shooting_power * Time.deltaTime) , 0);
         //System.Console.WriteLine("balle.y = ", screenPos.y, ", position max_ecran = ", m_height);
         if (screenPos.y >= m_height)
             Destroy(gameObject, 0);
+        if (screenPos.y >= m_height)
+            Destroy(gameObject, 0);
+        if (screenPos.y < 0)
+            Destroy(gameObject, 0);
+        if (screenPos.x >= m_width)
+            Destroy(gameObject, 0);
+        if (screenPos.x < 0)
+            Destroy(gameObject, 0);
+
         //if (screenPos.y < m_height)
-            //this.transform.position = new Vector3(transform.position.x, transform.position.y + (m_verticalSpeed  * Time.deltaTime), transform.position.z);
-            
+        //this.transform.position = new Vector3(transform.position.x, transform.position.y + (m_verticalSpeed  * Time.deltaTime), transform.position.z);
+
     }
 
-    public void ShootWithDirection(Vector3 direction)
+    public void ShootWithDirection(Vector3 direction, float shooting_power)
     {
-        this.direction = direction; 
+        this.direction = direction;
+        this.shooting_power = shooting_power;
        
     }
 

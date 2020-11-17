@@ -20,6 +20,7 @@ public class Player : Entity
     [SerializeField] private float m_width = Screen.width;
     [SerializeField] private float m_height = Screen.height;
     [SerializeField] private float rate_of_fire;
+    [SerializeField] private float shooting_power ;
 
     public GameObject bullets_prefab;
 
@@ -91,7 +92,7 @@ public class Player : Entity
         // move direction directly from axes
         if (Input.GetKey(KeyCode.RightArrow) == true)
         {
-            UnityEngine.Debug.Log("Width max:" + m_width);
+            //UnityEngine.Debug.Log("Width max:" + m_width);
             if (screenPos.x > m_width)
                 return;
             this.transform.position = new Vector3(transform.position.x + (m_HorizontalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
@@ -150,14 +151,14 @@ public class Player : Entity
             shootDirection = Input.mousePosition - screenToWorldPoint_player;
             //UnityEngine.Debug.Log("ShootDirection : " + shootDirection);
             shootDirection = shootDirection.normalized;
-            UnityEngine.Debug.Log("ShootDirectionNormalized : " + shootDirection);
+            //UnityEngine.Debug.Log("ShootDirectionNormalized : " + shootDirection);
 
             if (bullet_time > rate_of_fire)
             {
                 stopWatch.Reset();
                 stopWatch.Start();
                 GameObject instanciated_prefab = Instantiate(bullets_prefab, new Vector3(transform.position.x, transform.position.y , transform.position.z), Quaternion.identity);
-                instanciated_prefab.GetComponent<Bullet>().ShootWithDirection(shootDirection);
+                instanciated_prefab.GetComponent<Bullet>().ShootWithDirection(shootDirection, shooting_power);
                 instanciated_prefab.GetComponent<Bullet>().OnBulletHit += OnBulletHitPlayer; // suscribe to Bullet event OnHitBulelt
             }
             else
@@ -202,7 +203,7 @@ public class Player : Entity
             }
             this.loseHP(1);
 
-            UnityEngine.Debug.Log("Player Current HP : " + current_HP);
+            //UnityEngine.Debug.Log("Player Current HP : " + current_HP);
         }
 
         if (current_HP <= 0)  // If the player has nno HP , he dies 
@@ -224,7 +225,7 @@ public class Player : Entity
         {
             OnScoreChange(score);
         }
-        UnityEngine.Debug.Log("Total score : " + score_Player + "!");
+        //UnityEngine.Debug.Log("Total score : " + score_Player + "!");
     }
 
     public int GetHP() // Egalement, il sera nécessaire de créer une propriété public qui permet de récupérer la valeur max des PVs du vaisseau. 

@@ -113,6 +113,7 @@ MonoBehaviour:
   m_width: 297
   m_height: 459
   rate_of_fire: 0.25
+  shooting_power: 50
   bullets_prefab: {fileID: 2787729279022944727, guid: 63e437a2d3ccbaa4c831670bbc279fe8,
     type: 3}
   audioSource: {fileID: 0}

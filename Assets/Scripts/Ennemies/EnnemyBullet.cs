@@ -6,7 +6,7 @@ public class EnnemyBullet : MonoBehaviour
 {
     private float m_verticalSpeed = 20.0f;
     private float m_height = Screen.height;
-    //private float m_width = Screen.width;
+    private float m_width = Screen.width;
 
     private Camera m_MainCamera;
 
@@ -38,8 +38,13 @@ public class EnnemyBullet : MonoBehaviour
 
         if (screenPos.y >= m_height)
             Destroy(gameObject, 0);
+        if (screenPos.y  < 0 )
+            Destroy(gameObject, 0);
+        if (screenPos.x >= m_width)
+            Destroy(gameObject, 0);
+        if (screenPos.x < 0)
+            Destroy(gameObject, 0);
 
-       
 
     }
 
