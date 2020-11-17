@@ -123,11 +123,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   max_HP: 5
-  target: {fileID: 0}
-  m_verticalSpeed: 20
   m_height: 315
   delay_before_teleportation: 3
-  travel_distance: 8
+  travel_distance: 1
   oscillation: 3
   ennemybullet_prefab: {fileID: 1908890201545072088, guid: b2027f37d1411f74fb39794fced4e634,
     type: 3}
