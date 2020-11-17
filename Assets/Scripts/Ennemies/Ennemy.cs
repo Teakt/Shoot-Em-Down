@@ -25,6 +25,12 @@ public abstract class Ennemy : Entity
             Debug.Log("Ennemy HP : " + current_HP);
         }
 
+        if (collision.rigidbody.tag == "Bullet_type2") // the ennemy crashes if he collides with player
+        {
+            this.loseHP(3);
+            
+        }
+
         if (current_HP <= 0)  // If the player has nno HP , he dies 
         {
             Destroy(this.gameObject);

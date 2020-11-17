@@ -20,9 +20,12 @@ public class Player : Entity
     [SerializeField] private float m_width = Screen.width;
     [SerializeField] private float m_height = Screen.height;
     [SerializeField] private float rate_of_fire;
+    [SerializeField] private float rate_of_fire_type2;
     [SerializeField] private float shooting_power ;
+    [SerializeField] private float shooting_power_type2;
 
     public GameObject bullets_prefab;
+    public GameObject bullet_type2_prefab;
 
     Stopwatch stopWatch = new Stopwatch();
 
@@ -90,52 +93,32 @@ public class Player : Entity
         //{
         // We are grounded, so recalculate
         // move direction directly from axes
-        if (Input.GetKey(KeyCode.RightArrow) == true)
+        if (Input.GetKey(KeyCode.RightArrow) == true || Input.GetKey(KeyCode.D) == true )
         {
             //UnityEngine.Debug.Log("Width max:" + m_width);
             if (screenPos.x > m_width)
                 return;
             this.transform.position = new Vector3(transform.position.x + (m_HorizontalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
         }
-        if (Input.GetKey(KeyCode.LeftArrow) == true)
+        if (Input.GetKey(KeyCode.LeftArrow) == true || Input.GetKey(KeyCode.Q) == true )
         {
             if (screenPos.x < 0)
                 return;
             this.transform.position = new Vector3(transform.position.x - (m_HorizontalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
         }
-        if (Input.GetKey(KeyCode.UpArrow) == true)
+        if (Input.GetKey(KeyCode.UpArrow) == true || Input.GetKey(KeyCode.Z) == true )
         {
             if (screenPos.y > m_height)
                 return;
             this.transform.position = new Vector3(transform.position.x, transform.position.y + (m_VerticalSpeed * Time.deltaTime), transform.position.z);
         }
-        if (Input.GetKey(KeyCode.DownArrow) == true)
+        if (Input.GetKey(KeyCode.DownArrow) == true || Input.GetKey(KeyCode.S) == true )
         {
             if (screenPos.y < 0)
                 return;
             this.transform.position = new Vector3(transform.position.x, transform.position.y - (m_VerticalSpeed * Time.deltaTime), transform.position.z);
         }
-        /*
-        if (Input.GetKey(KeyCode.Space) == true)
-        {
-            stopWatch.Stop();
-            TimeSpan ts = stopWatch.Elapsed;
-
-            //print(ts.TotalSeconds);
-            double bullet_time = ts.TotalSeconds;
-
-            if (bullet_time > rate_of_fire)
-            {
-                stopWatch.Reset();
-                stopWatch.Start();
-                GameObject instanciated_prefab = Instantiate(bullets_prefab, new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), Quaternion.identity);
-                instanciated_prefab.GetComponent<Bullet>().OnBulletHit += OnBulletHitPlayer; // suscribe to Bullet event OnHitBulelt
-            }
-            else
-                stopWatch.Start();
-            //this.transform.position = new Vector3(transform.position.x, transform.position.y - (m_VerticalSpeed * Time.deltaTime), transform.position.z);
-        }
-        */
+       
         if (Input.GetMouseButtonDown(0))
         {
             stopWatch.Stop();
@@ -165,6 +148,11 @@ public class Player : Entity
             {
                 stopWatch.Start();
             }
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            secondaryShoot();
         }
           
 
@@ -236,6 +224,32 @@ public class Player : Entity
     public int GetScore() //  et de même pour OnScoreChange avec le score. 
     {
         return score_Player;
+    }
+
+    public void secondaryShoot()
+    {
+        //UnityEngine.Debug.Log("Secondary shoot");
+        stopWatch.Stop();
+        TimeSpan ts = stopWatch.Elapsed;
+
+        double bullet_time = ts.TotalSeconds;
+        Vector3 screenToWorldPoint_player = m_MainCamera.WorldToScreenPoint(this.transform.position);
+        screenToWorldPoint_player.z = 0.0f;
+        shootDirection = Input.mousePosition - screenToWorldPoint_player;
+        shootDirection = shootDirection.normalized;   
+
+        if (bullet_time > rate_of_fire_type2)
+        {
+            stopWatch.Reset();
+            stopWatch.Start();
+            GameObject instanciated_prefab = Instantiate(bullet_type2_prefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+            instanciated_prefab.GetComponent<Bullet_Type2>().ShootWithDirection(shootDirection, shooting_power_type2);
+            instanciated_prefab.GetComponent<Bullet_Type2>().OnBulletHit += OnBulletHitPlayer; // suscribe to Bullet event OnHitBulelt
+        }
+        else
+        {
+            stopWatch.Start();
+        }
     }
 
 }

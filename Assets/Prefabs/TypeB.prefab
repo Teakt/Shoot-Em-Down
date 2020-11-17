@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 460d42e7262f1e34d9b868dbb3f3a2fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_HP: 1
+  max_HP: 2
   m_verticalSpeed: 10
   m_height: 315
   delay_before_shooting: 2

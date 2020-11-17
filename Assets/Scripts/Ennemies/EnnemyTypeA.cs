@@ -64,13 +64,15 @@ public class EnnemyTypeA : Ennemy
         double elapsed_time = ts.TotalSeconds;
         this.transform.position = new Vector3(transform.position.x, transform.position.y - (travel_distance * Time.deltaTime), transform.position.z); // Goes toward down direction
 
+
+        StartCoroutine(Wait());
         if (elapsed_time > delay_before_teleportation)
         {
             stopWatch.Reset();
             stopWatch.Start();
 
             if (screenPos.y > 0)
-                travel_distance = 0f;
+                
                 this.transform.position = new Vector3(transform.position.x + UnityEngine.Random.Range( -oscillation, oscillation), transform.position.y , transform.position.z); // Goes toward down direction
             Shoot();
             
@@ -102,4 +104,13 @@ public class EnnemyTypeA : Ennemy
        
         
     }
+
+
+    IEnumerator Wait()
+    {
+
+        travel_distance = 0f;
+        yield return new WaitForSeconds(delay_before_teleportation);
+        travel_distance = 3f ;
+    } 
 }

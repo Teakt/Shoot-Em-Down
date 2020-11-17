@@ -2327,6 +2327,22 @@ PrefabInstance:
       propertyPath: rate_of_fire
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 4186757372208393328, guid: 65b939bdab4ede14885cfe43de54dd9a,
+        type: 3}
+      propertyPath: bullet_type2_prefab
+      value: 
+      objectReference: {fileID: 6860315147978906571, guid: b78e2ec217cb1e64fa21d18713913d33,
+        type: 3}
+    - target: {fileID: 4186757372208393328, guid: 65b939bdab4ede14885cfe43de54dd9a,
+        type: 3}
+      propertyPath: shooting_power_type2
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4186757372208393328, guid: 65b939bdab4ede14885cfe43de54dd9a,
+        type: 3}
+      propertyPath: rate_of_fire_type2
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4186757372208393329, guid: 65b939bdab4ede14885cfe43de54dd9a,
         type: 3}
       propertyPath: m_Name
