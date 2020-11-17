@@ -116,6 +116,7 @@ public class EnnemyManager : MonoBehaviour
             Debug.Log("All waves compelted! Looping ...");
             //Spawn boss ? 
             //state = SpawnState.WAITING;
+            
         }
         else
         {
