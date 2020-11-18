@@ -8,46 +8,44 @@ using System;
 
 public class Player : Entity
 {
-
-    CharacterController characterController;
-
-    private Vector3 moveDirection = Vector3.zero;
-
-
+    
+    [Header("[Camera Settings]")]
     [SerializeField] private Camera m_MainCamera;
-    [SerializeField] private float m_VerticalSpeed;
-    [SerializeField] private float m_HorizontalSpeed;
     [SerializeField] private float m_width = Screen.width;
     [SerializeField] private float m_height = Screen.height;
+
+    [Header("[Movements Settings]")]
+    [SerializeField] private Vector3 moveDirection = Vector3.zero;
+    [SerializeField] private float m_VerticalSpeed;
+    [SerializeField] private float m_HorizontalSpeed;
+
+    [Header("[Shooting Settings]")]
     [SerializeField] private float rate_of_fire;
     [SerializeField] private float rate_of_fire_type2;
     [SerializeField] private float shooting_power ;
     [SerializeField] private float shooting_power_type2;
-
     public GameObject bullets_prefab;
     public GameObject bullet_type2_prefab;
+    [SerializeField] private float special_shoot_cd_UI;
+    public float timeBetweenEachShoot = 3f;
+    [SerializeField] private float timeBetweenShootCountdown;
+
+    [Header("[Sound Settings]")]
+    public AudioSource audioSource;
 
     Stopwatch stopWatch = new Stopwatch();
 
-
-    public AudioSource audioSource;
-
     Vector3 shootDirection;
 
-
-
     public int score_Player { get; set; }
-
-
     /*-----------------------------------------------------------------------------*/
     public delegate void OnHPChangeEvent(int hp);
     public event OnHPChangeEvent OnHPChange;
 
-    //public int HP { get; set; } // Health Points of the player 
-
     /*-----------------------------------------------------------------------------*/
     public delegate void OnScoreChangeEvent(int score);
     public event OnScoreChangeEvent OnScoreChange;
+
 
     public override void Awake()
     {
@@ -62,40 +60,23 @@ public class Player : Entity
     {
         m_width = Screen.width;
         m_height = Screen.height;
-        
-        characterController = GetComponent<CharacterController>();
         audioSource = GetComponent<AudioSource>();
-
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         PlayerControl();
-
-       
     }
 
     void PlayerControl()
     {
         // Pos of the player to the camera
         Vector3 screenPos = m_MainCamera.WorldToScreenPoint(transform.position);
-        
-        
 
-
-        //get the Input from Horizontal axis
-        float horizontalInput = Input.GetAxis("Horizontal");
-        //get the Input from Vertical axis
-        float verticalInput = Input.GetAxis("Vertical");
-
-        //if (characterController.isGrounded)
-        //{
-        // We are grounded, so recalculate
         // move direction directly from axes
         if (Input.GetKey(KeyCode.RightArrow) == true || Input.GetKey(KeyCode.D) == true )
         {
-            //UnityEngine.Debug.Log("Width max:" + m_width);
             if (screenPos.x > m_width)
                 return;
             this.transform.position = new Vector3(transform.position.x + (m_HorizontalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
@@ -123,19 +104,12 @@ public class Player : Entity
         {
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;
-
-
-
             double bullet_time = ts.TotalSeconds;
             Vector3 screenToWorldPoint_player = m_MainCamera.WorldToScreenPoint(this.transform.position);
             screenToWorldPoint_player.z = 0.0f;
-            //UnityEngine.Debug.Log("Player pos  : " + this.transform.position + " screentoworldplayer :" + screenToWorldPoint_player);
-            //UnityEngine.Debug.Log("mouse : " + Input.mousePosition );
             shootDirection = Input.mousePosition - screenToWorldPoint_player;
-            //UnityEngine.Debug.Log("ShootDirection : " + shootDirection);
             shootDirection = shootDirection.normalized;
-            //UnityEngine.Debug.Log("ShootDirectionNormalized : " + shootDirection);
-
+  
             if (bullet_time > rate_of_fire)
             {
                 stopWatch.Reset();
@@ -149,28 +123,25 @@ public class Player : Entity
                 stopWatch.Start();
             }
         }
-
-        if (Input.GetMouseButtonDown(1))
+        if (timeBetweenShootCountdown <= 0)
         {
-            secondaryShoot();
+                if (Input.GetMouseButtonDown(1))
+                {
+                    secondaryShoot();
+                    timeBetweenShootCountdown = timeBetweenEachShoot;
+                }
+                
+                }
+        else
+        {
+            timeBetweenShootCountdown -= Time.deltaTime;
         }
-          
-
-
-
-
-
-
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        // Debug-draw all contact points and normals
         if (collision.rigidbody.tag == "Ennemy")
         {
-            //UnityEngine.Debug.Log(collision.rigidbody.tag);
-            // Destroy(collision.gameObject); // Ennmey dies while crashing into the player
-            //current_HP -= 1;
             if (OnHPChange != null)
             {
                 OnHPChange(1);
@@ -179,45 +150,28 @@ public class Player : Entity
 
             UnityEngine.Debug.Log("Player Current HP : " + current_HP);
         }
-
         if (collision.rigidbody.tag == "CubeBoss")
         {
-            //UnityEngine.Debug.Log(collision.rigidbody.tag);
-            // Destroy(collision.gameObject); // Ennmey dies while crashing into the player
-            //current_HP -= 1;
             if (OnHPChange != null)
             {
                 OnHPChange(5);
             }
             this.loseHP(5);
-
-            //UnityEngine.Debug.Log("Player Current HP : " + current_HP);
         }
 
         if (collision.rigidbody.tag == "EnnemyBullet")
         {
-            //UnityEngine.Debug.Log(collision.rigidbody.tag);
-            // Destroy(collision.gameObject); // Ennmey dies while crashing into the player
-            //current_HP -= 1;
             if (OnHPChange != null)
             {
                 OnHPChange(1);
             }
             this.loseHP(1);
-
-            //UnityEngine.Debug.Log("Player Current HP : " + current_HP);
         }
 
         if (current_HP <= 0)  // If the player has nno HP , he dies 
         {
             this.gameObject.SetActive(false);
         }
-
-
-       /* // Play a sound if the colliding objects had a big impact.
-        if (collision.relativeVelocity.magnitude > 2)
-            audioSource.Play();
-            */
     }
 
     private void OnBulletHitPlayer(int score)
@@ -227,7 +181,6 @@ public class Player : Entity
         {
             OnScoreChange(score);
         }
-        //UnityEngine.Debug.Log("Total score : " + score_Player + "!");
     }
 
     public int GetHP() // Egalement, il sera nécessaire de créer une propriété public qui permet de récupérer la valeur max des PVs du vaisseau. 
@@ -240,30 +193,26 @@ public class Player : Entity
         return score_Player;
     }
 
+    public float GetSpecialShootCd()
+    {
+        return timeBetweenShootCountdown;
+    }
+
     public void secondaryShoot()
     {
-        //UnityEngine.Debug.Log("Secondary shoot");
-        stopWatch.Stop();
+        //stopWatch.Stop();
         TimeSpan ts = stopWatch.Elapsed;
-
         double bullet_time = ts.TotalSeconds;
         Vector3 screenToWorldPoint_player = m_MainCamera.WorldToScreenPoint(this.transform.position);
         screenToWorldPoint_player.z = 0.0f;
         shootDirection = Input.mousePosition - screenToWorldPoint_player;
-        shootDirection = shootDirection.normalized;   
+        shootDirection = shootDirection.normalized;
+        
 
-        if (bullet_time > rate_of_fire_type2)
-        {
-            stopWatch.Reset();
-            stopWatch.Start();
-            GameObject instanciated_prefab = Instantiate(bullet_type2_prefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
-            instanciated_prefab.GetComponent<Bullet_Type2>().ShootWithDirection(shootDirection, shooting_power_type2);
-            instanciated_prefab.GetComponent<Bullet_Type2>().OnBulletHit += OnBulletHitPlayer; // suscribe to Bullet event OnHitBulelt
-        }
-        else
-        {
-            stopWatch.Start();
-        }
+        GameObject instanciated_prefab = Instantiate(bullet_type2_prefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+        instanciated_prefab.GetComponent<Bullet_Type2>().ShootWithDirection(shootDirection, shooting_power_type2);
+        instanciated_prefab.GetComponent<Bullet_Type2>().OnBulletHit += OnBulletHitPlayer; // suscribe to Bullet event OnHitBulelt
+        
     }
 
 }

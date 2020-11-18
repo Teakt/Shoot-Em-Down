@@ -4,10 +4,6 @@ using UnityEngine;
 
 public abstract class Ennemy : Entity
 {
-    
-
-   
-   
 
     public abstract void Move();
     public abstract void Shoot();
@@ -18,28 +14,18 @@ public abstract class Ennemy : Entity
         {
             Destroy(this.gameObject);
         }
-
         if (collision.rigidbody.tag == "Bullet") // the ennemy crashes if he collides with player
         {
             this.loseHP(1);
-            Debug.Log("Ennemy HP : " + current_HP);
+            //Debug.Log("Ennemy HP : " + current_HP);
         }
-
         if (collision.rigidbody.tag == "Bullet_type2") // the ennemy crashes if he collides with player
         {
-            this.loseHP(3);
-            
+            this.loseHP(5);
         }
-
         if (current_HP <= 0)  // If the player has nno HP , he dies 
         {
             Destroy(this.gameObject);
         }
-
-
-        /* // Play a sound if the colliding objects had a big impact.
-         if (collision.relativeVelocity.magnitude > 2)
-             audioSource.Play();
-             */
     }
 }

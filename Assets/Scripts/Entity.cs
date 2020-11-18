@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class  Entity : MonoBehaviour
 {
-
     [SerializeField] private  int max_HP ;  // Maximum health points of the entity
-
-
     private int _current_HP;
 
     public int current_HP
@@ -27,8 +24,6 @@ public class  Entity : MonoBehaviour
     {
         _current_HP -= lost_hp;
     }
-
-    
 
     public virtual void Awake()
     {

@@ -122,10 +122,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f43aa304240fad24baef9eb6567c71b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_HP: 5
+  max_HP: 3
   m_height: 315
   delay_before_teleportation: 5
-  travel_distance: 2
+  travel_distance: 3
   oscillation: 5
   ennemybullet_prefab: {fileID: 1908890201545072088, guid: b2027f37d1411f74fb39794fced4e634,
     type: 3}

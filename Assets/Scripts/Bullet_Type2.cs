@@ -20,13 +20,9 @@ public class Bullet_Type2 : MonoBehaviour
 
     Vector3 direction;
 
-
-
     private Vector3 scaleChange;
 
     [SerializeField] private float scaling_rate = 1f ; 
-
-    //bool token = false;
 
     void Awake()
     {
@@ -38,8 +34,6 @@ public class Bullet_Type2 : MonoBehaviour
     void Start()
     {
         score = 0;
-       
-        
     }
 
     // Update is called once per frame
@@ -52,9 +46,7 @@ public class Bullet_Type2 : MonoBehaviour
 
     void Move()
     {
-
         Vector3 screenPos = m_MainCamera.WorldToScreenPoint(this.transform.position);
-        
         this.transform.position = new Vector3(transform.position.x + direction.x * (shooting_power * Time.deltaTime), transform.position.y + direction.y * (shooting_power * Time.deltaTime), 0);
         //System.Console.WriteLine("balle.y = ", screenPos.y, ", position max_ecran = ", m_height);
         if (screenPos.y >= m_height)
@@ -67,10 +59,6 @@ public class Bullet_Type2 : MonoBehaviour
             Destroy(gameObject, 0);
         if (screenPos.x < 0)
             Destroy(gameObject, 0);
-
-        //if (screenPos.y < m_height)
-        //this.transform.position = new Vector3(transform.position.x, transform.position.y + (m_verticalSpeed  * Time.deltaTime), transform.position.z);
-
     }
 
     public void ShootWithDirection(Vector3 direction, float shooting_power)
@@ -90,24 +78,7 @@ public class Bullet_Type2 : MonoBehaviour
             if (OnBulletHit != null)
             {
                 OnBulletHit(score);
-            }
-           
+            }  
         }
-
-
-
-
-        /* // Play a sound if the colliding objects had a big impact.
-         if (collision.relativeVelocity.magnitude > 2)
-             audioSource.Play();
-             */
     }
-    /*
-    public void BulletHit()
-    {
-        FindObjectOfType<Player>().score+= 50;
-        UnityEngine.Debug.Log("Ennemy Hit SCORE GOES UP : " + FindObjectOfType<Player>().score + "!");
-    }
-    */
-
 }
