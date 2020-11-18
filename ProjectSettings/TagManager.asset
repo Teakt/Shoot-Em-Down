@@ -8,6 +8,7 @@ TagManager:
   - Bullet
   - EnnemyBullet
   - Bullet_type2
+  - CubeBoss
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - EnnemyBullet
   - 
   - 
   - 

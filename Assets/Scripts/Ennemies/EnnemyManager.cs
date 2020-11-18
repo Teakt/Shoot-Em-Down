@@ -13,6 +13,7 @@ public class EnnemyManager : MonoBehaviour
         SPAWNING,
         WAITING,
         COUNTING,
+        BOSS,
     }
 
     [System.Serializable]
@@ -32,9 +33,9 @@ public class EnnemyManager : MonoBehaviour
     public float timeBetweenWaves = 5f;
     [SerializeField] private float waveCountdown;
 
-    private float SearchCountdown = 1f; 
+    private float SearchCountdown = 1f;
 
-    private SpawnState state = SpawnState.COUNTING;
+    [SerializeField]  private SpawnState state = SpawnState.COUNTING;
 
 
     /*--------------------*/
@@ -46,6 +47,8 @@ public class EnnemyManager : MonoBehaviour
 
     [SerializeField] private Camera m_MainCamera;
     // Start is called before the first frame update
+
+    [SerializeField] private CubeBoss cube_boss;
 
     void Awake()
     {
@@ -75,7 +78,7 @@ public class EnnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(state == SpawnState.WAITING)
+        if (state == SpawnState.WAITING)
         {
             if (!EnnemyIsAlive())
             {
@@ -89,19 +92,24 @@ public class EnnemyManager : MonoBehaviour
             }
         }
 
-        if(waveCountdown <= 0)
+
+        if (state != SpawnState.BOSS)
         {
-            if(state != SpawnState.SPAWNING)
+            if (waveCountdown <= 0)
             {
-                // Start spawning wave
-                StartCoroutine(SpawnWave(waves[nextWave]));
+                if (state != SpawnState.SPAWNING)
+                {
+                    // Start spawning wave
+                    StartCoroutine(SpawnWave(waves[nextWave]));
+                }
+            }
+            else
+            {
+                waveCountdown -= Time.deltaTime;
             }
         }
-        else
-        {
-            waveCountdown -= Time.deltaTime;
-        }
     }
+       
 
     void WaveCompleted()
     {
@@ -113,10 +121,10 @@ public class EnnemyManager : MonoBehaviour
         if(nextWave + 1 > waves.Length - 1 )
         {
             nextWave = 0;
-            Debug.Log("All waves compelted! Looping ...");
+            Debug.Log("All waves compelted! BOSS INCOMING");
             //Spawn boss ? 
-            //state = SpawnState.WAITING;
-            
+            state = SpawnState.BOSS;
+            cube_boss.gameObject.SetActive(true);
         }
         else
         {
