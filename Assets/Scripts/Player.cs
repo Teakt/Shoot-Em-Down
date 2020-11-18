@@ -26,11 +26,12 @@ public class Player : Entity
 
     public GameObject bullets_prefab;
     public GameObject bullet_type2_prefab;
+    public AudioSource Bang;
+    public AudioSource Laser;
 
     Stopwatch stopWatch = new Stopwatch();
 
 
-    public AudioSource audioSource;
 
     Vector3 shootDirection;
 
@@ -64,13 +65,14 @@ public class Player : Entity
         m_height = Screen.height;
         
         characterController = GetComponent<CharacterController>();
-        audioSource = GetComponent<AudioSource>();
+        
 
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        transform.rotation = Quaternion.Euler(new Vector3(-90.0f, 0f, 0.0f));
         PlayerControl();
 
        
@@ -118,7 +120,13 @@ public class Player : Entity
                 return;
             this.transform.position = new Vector3(transform.position.x, transform.position.y - (m_VerticalSpeed * Time.deltaTime), transform.position.z);
         }
-       
+
+        Vector3 pos = Input.mousePosition;
+        Vector3 screenToWorldPoint_player = m_MainCamera.WorldToScreenPoint(this.transform.position);
+        Vector3 direction = pos - screenToWorldPoint_player;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        this.transform.Rotate(new Vector3(0, -angle + 90, 0));
+
         if (Input.GetMouseButtonDown(0))
         {
             stopWatch.Stop();
@@ -127,7 +135,6 @@ public class Player : Entity
 
 
             double bullet_time = ts.TotalSeconds;
-            Vector3 screenToWorldPoint_player = m_MainCamera.WorldToScreenPoint(this.transform.position);
             screenToWorldPoint_player.z = 0.0f;
             //UnityEngine.Debug.Log("Player pos  : " + this.transform.position + " screentoworldplayer :" + screenToWorldPoint_player);
             //UnityEngine.Debug.Log("mouse : " + Input.mousePosition );
@@ -140,7 +147,8 @@ public class Player : Entity
             {
                 stopWatch.Reset();
                 stopWatch.Start();
-                GameObject instanciated_prefab = Instantiate(bullets_prefab, new Vector3(transform.position.x, transform.position.y , transform.position.z), Quaternion.identity);
+                Bang.Play();
+                GameObject instanciated_prefab = Instantiate(bullets_prefab, new Vector3(transform.position.x, transform.position.y , transform.position.z), Quaternion.Euler(new Vector3(0.0f, 0f, angle - 90.0f)));
                 instanciated_prefab.GetComponent<Bullet>().ShootWithDirection(shootDirection, shooting_power);
                 instanciated_prefab.GetComponent<Bullet>().OnBulletHit += OnBulletHitPlayer; // suscribe to Bullet event OnHitBulelt
             }
@@ -256,6 +264,7 @@ public class Player : Entity
         {
             stopWatch.Reset();
             stopWatch.Start();
+            Laser.Play();
             GameObject instanciated_prefab = Instantiate(bullet_type2_prefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
             instanciated_prefab.GetComponent<Bullet_Type2>().ShootWithDirection(shootDirection, shooting_power_type2);
             instanciated_prefab.GetComponent<Bullet_Type2>().OnBulletHit += OnBulletHitPlayer; // suscribe to Bullet event OnHitBulelt
