@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnnemyBullet : MonoBehaviour
 {
-    private float m_verticalSpeed = 20.0f;
+    [SerializeField] private float m_verticalSpeed = 20.0f;
     private float m_height = Screen.height;
     private float m_width = Screen.width;
 

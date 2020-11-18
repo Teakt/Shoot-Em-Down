@@ -359,25 +359,22 @@ MonoBehaviour:
   m_width: 1604
   m_height: 731
   m_VerticalSpeed: 40
-  m_HorizontalSpeed: 0
+  MovSpeed: 10
+  rotateSpeed: 80
+  chargePower: 150
   rate_of_fire: 0
   shooting_power: 0
+  timeBetweenEachShot: 5
+  timeBetweenShotCountdown: 0
+  timeBetweenEachCharge: 5
+  timeBetweenChargeCountdown: 0
   ennemybullet_prefab: {fileID: 971350411607830144, guid: 4fb4701aad287644f94717dfb0df049f,
     type: 3}
   ennemytype2_prefab: {fileID: 392196492999702934, guid: 8b56218ec537bee49810ccc3ddc481de,
     type: 3}
-  timeBetweenEachShot: 10
-  timeBetweenShotCountdown: 0
-  timeBetweenEachState: 1
-  timeBetweenStateCountdown: 0
-  timeBetweenEachCharge: 5
-  timeBetweenChargeCountdown: 0
-  boss_state: 2
-  boss_phase: 2
-  MovSpeed: 10
-  rotateSpeed: 80
-  chargePower: 150
   boss_status: 1
+  timeBetweenEachState: 3
+  timeBetweenStateCountdown: 0
   corners:
   - {fileID: 591241547}
   - {fileID: 517784934}
@@ -387,6 +384,8 @@ MonoBehaviour:
   - {fileID: 831931080}
   - {fileID: 234107321}
   - {fileID: 933810145}
+  boss_state: 2
+  boss_phase: 0
   mat_boss: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
 --- !u!54 &1247416919
 Rigidbody:

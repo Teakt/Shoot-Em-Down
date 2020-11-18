@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class EnnemyManager : MonoBehaviour
 {
-
-
     public enum SpawnState
     {
         SPAWNING,
@@ -25,31 +23,25 @@ public class EnnemyManager : MonoBehaviour
         public float rate;  
     }
 
+    [Header("[Waves Settings]")]
     public Wave[] waves;
     private int nextWave = 0;
-
-    public Transform[] spawnPoints;
-
     public float timeBetweenWaves = 5f;
     [SerializeField] private float waveCountdown;
 
+    [Header("[Spawn Settings]")]
+    public Transform[] spawnPoints;
+    [SerializeField] private SpawnState state = SpawnState.COUNTING;
+
     private float SearchCountdown = 1f;
-
-    [SerializeField]  private SpawnState state = SpawnState.COUNTING;
-
-
     /*--------------------*/
-
-    [SerializeField] private float appearance_delay;
-
+    [Header("[Ennemy Prefabs Settings]")]
     public GameObject ennemy_prefab;
     public GameObject ennemy_typeB;
-
-    [SerializeField] private Camera m_MainCamera;
-    // Start is called before the first frame update
-
     [SerializeField] private CubeBoss cube_boss;
 
+    private Camera m_MainCamera;
+    // Start is called before the first frame update
     void Awake()
     {
         
@@ -57,22 +49,11 @@ public class EnnemyManager : MonoBehaviour
     }
     void Start()
     {
-
         if (spawnPoints.Length == 0)
         {
             Debug.LogError("No spawn points referenced .");
         }
         waveCountdown = timeBetweenWaves; 
-        /*
-        if (Application.isPlaying)
-        {
-            IEnumerator coroutine = WaitAndSpawnEnnemy(appearance_delay);
-            StartCoroutine(coroutine);
-
-            IEnumerator coroutine2 = WaitAndSpawnEnnemyB(appearance_delay);
-            StartCoroutine(coroutine2);
-        }
-        */
     }
 
     // Update is called once per frame
@@ -84,7 +65,6 @@ public class EnnemyManager : MonoBehaviour
             {
                 // Begin a new round 
                 WaveCompleted();
-
             }
             else
             {
@@ -114,7 +94,6 @@ public class EnnemyManager : MonoBehaviour
     void WaveCompleted()
     {
         Debug.Log("Wave Completed");
-
         state = SpawnState.COUNTING;
         waveCountdown = timeBetweenWaves;
 
@@ -129,9 +108,7 @@ public class EnnemyManager : MonoBehaviour
         else
         {
             nextWave++;
-        }
-
-       
+        } 
     }
 
     bool EnnemyIsAlive()
@@ -142,13 +119,10 @@ public class EnnemyManager : MonoBehaviour
         {
             SearchCountdown = 1f;
             if (GameObject.FindGameObjectWithTag("Ennemy") == null) // if there is any ennemy alive in the scene
-            {
-                
+            {   
                 return false;
             }
         }
-       
-
         return true; 
     }
 
@@ -159,7 +133,6 @@ public class EnnemyManager : MonoBehaviour
         state = SpawnState.SPAWNING;
 
         //Spawn 
-
         state = SpawnState.WAITING; 
 
         for(int i = 0; i< _wave.count ; i ++)
@@ -184,31 +157,8 @@ public class EnnemyManager : MonoBehaviour
         Instantiate(_ennemy, _sp.position, _sp.rotation);
     }
 
-    /*
-    // every 2 seconds perform the print()
-    private IEnumerator WaitAndSpawnEnnemy(float waitTime)
+    public SpawnState GetSpawnState()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(waitTime);
-            Vector3 screenTopSide = m_MainCamera.ScreenToWorldPoint(new Vector3(UnityEngine.Random.Range(0, m_MainCamera.pixelWidth), m_MainCamera.pixelHeight, -m_MainCamera.transform.position.z));
-            Instantiate(ennemy_prefab,screenTopSide, Quaternion.identity);
-        }
+        return state;
     }
-
-    
-    // every 2 seconds perform the print()
-    private IEnumerator WaitAndSpawnEnnemyB(float waitTime)
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(waitTime);
-            Vector3 screenTopSide = m_MainCamera.ScreenToWorldPoint(new Vector3(UnityEngine.Random.Range(0, m_MainCamera.pixelWidth), m_MainCamera.pixelHeight, -m_MainCamera.transform.position.z));
-            Instantiate(ennemy_typeB, screenTopSide, Quaternion.identity);
-        }
-    }
-    */
-    
-
-
 }

@@ -124,11 +124,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 460d42e7262f1e34d9b868dbb3f3a2fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_HP: 2
+  max_HP: 4
   m_verticalSpeed: 10
   m_height: 315
   delay_before_shooting: 2
-  shoot_zone_distance: 15
+  shoot_zone_distance: 25
   movementSpeed: 0
   shotgun_spread_angle: 10
   ennemybullet_prefab: {fileID: 1908890201545072088, guid: b2027f37d1411f74fb39794fced4e634,

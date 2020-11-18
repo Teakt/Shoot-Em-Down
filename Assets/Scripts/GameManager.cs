@@ -8,8 +8,6 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 {
     public bool gameIsNotPaused = true ;
 
-   
-    
     private bool _gameIsNotPaused // ecriture prive pour _pause_status
     {
         get
@@ -24,13 +22,15 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     // Start is called before the first frame update
     protected override void Awake()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if ( Input.GetKeyDown(KeyCode.P) == true)
+        {
+            Play();
+        }
     }
 
     public void ResetLevel()

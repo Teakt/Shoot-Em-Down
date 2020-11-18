@@ -6,38 +6,37 @@ using System;
 
 public class EnnemyTypeB : Ennemy
 {
-    
-    private Player target;
+    [Header("[Shooting Settings]")]
+    [SerializeField] private float shotgun_spread_angle;
+    [SerializeField] private float delay_before_shooting;
+    [SerializeField] private float shoot_zone_distance;
 
+    [Header("[Movements Settings]")]
+    [SerializeField] private float distanceToPlayer;
+    [SerializeField] private float movementSpeed;
 
-    Stopwatch stopWatch = new Stopwatch(); // for the teleportation of the EnnemyA
+    [Header("[Prefabs Settings]")]
+    [SerializeField] private GameObject ennemybullet_prefab;
 
+    [Header("[Screen Settings]")]
     private Camera m_MainCamera;
     [SerializeField] private float m_verticalSpeed;
     [SerializeField] private float m_height = Screen.height;
 
-    [SerializeField] private float delay_before_shooting;
-    private float distanceToPlayer;
-    [SerializeField] private float shoot_zone_distance;
-    [SerializeField] private float movementSpeed;
+    private Player target;
 
-
-    [SerializeField] private float shotgun_spread_angle;
-
-    [SerializeField] private GameObject ennemybullet_prefab;
+    Stopwatch stopWatch = new Stopwatch(); // for the teleportation of the EnnemyA
 
     // Start is called before the first frame update
     public override void Awake()
     {
         base.Awake();
-
         m_MainCamera = Camera.main;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -54,7 +53,6 @@ public class EnnemyTypeB : Ennemy
             }
             else
             {
-
                 stopWatch.Stop();
                 TimeSpan ts = stopWatch.Elapsed;
                 double elapsed_time = ts.TotalSeconds;
@@ -63,42 +61,28 @@ public class EnnemyTypeB : Ennemy
                 {
                     stopWatch.Reset();
                     stopWatch.Start();
-
-                    
                     Shoot();
-
                 }
-
                 else
                 {
                     stopWatch.Start();
                 }
-               
-            }
-            
+            }   
         }
-        
     }
 
     public override void Move()
     {
         Vector3 screenPos = m_MainCamera.WorldToScreenPoint(this.transform.position);
-
-
         Vector3 directionToTarget = target.transform.position - transform.position; 
-
-        //System.Console.WriteLine("balle.y = ", screenPos.y, ", position max_ecran = ", m_height);
         if (screenPos.y < 0)
             Destroy(gameObject, 0f);
         if (screenPos.y > 0)
-            //this.transform.position = new Vector3(transform.position.x + (m_verticalSpeed * Time.deltaTime * 0.2f), transform.position.y - (m_verticalSpeed * Time.deltaTime), transform.position.z); // Goes toward down direction
             this.transform.position = new Vector3(transform.position.x + (directionToTarget.x * Time.deltaTime ), transform.position.y + (directionToTarget.y * Time.deltaTime), transform.position.z);
     }
 
     public override void Shoot()
     {
-        //Shoot
-       
         GameObject instanciated_prefab = Instantiate(ennemybullet_prefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
         Vector3 direction = target.transform.position - transform.position;
         instanciated_prefab.GetComponent<EnnemyBullet>().ShootWithDirection(direction.normalized);
@@ -123,14 +107,10 @@ public class EnnemyTypeB : Ennemy
         direction3.z = 0f;
         instanciated_prefab3.GetComponent<EnnemyBullet>().ShootWithDirection(direction3.normalized);
 
-
         GameObject instanciated_prefab4 = Instantiate(ennemybullet_prefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
         Vector3 direction4 = target.transform.position - transform.position;
         direction4 = Quaternion.AngleAxis(shotgun_spread_angle - shotgun_spread_angle/2f, new Vector3(0, 0, 1)) * direction4;
         direction4.z = 0f;
         instanciated_prefab4.GetComponent<EnnemyBullet>().ShootWithDirection(direction4.normalized);
-
-
-
     }
 }

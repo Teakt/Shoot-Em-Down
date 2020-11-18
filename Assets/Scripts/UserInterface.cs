@@ -25,16 +25,21 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
 
 
     [SerializeField] private CubeBoss cube_boss;
+
+    [SerializeField] private Button special_shot;
+    [SerializeField] private Text special_shot_text;
+    [SerializeField] private Text special_shot_cd;
+    [SerializeField] private GameObject special_shot_cross;
+    [SerializeField] private GameObject warningPanel;
+
+    [SerializeField] private Text finalScore;
+
+    float timer = 3f;
+    float cd_timer;
+
+    [SerializeField] private EnnemyManager ennemy_manager;
     protected override void Awake()
     {
-        /*
-        HP_bar_UI = GetComponentInChildren<Slider>();
-        Player player = FindObjectOfType<Player>();
-        player.OnHPChange += HandlingHPChange;
-        HP_bar_UI.value = player.GetHP(); // Set the slider bar value to the Player max hp current
-        */
-
-        
         player.OnHPChange += HandlingHPChange;
         player.OnHPChange += HandlingGameOver;
 
@@ -57,26 +62,23 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
         cubeboss_hp_bar.maxValue = cube_boss.GetMaxHP();
         cubeboss_hp_bar.value = cube_boss.GetMaxHP();
 
-        //float test = 3f;
-        // bar.localScale = new Vector3(test, 1f);
+        cd_timer = timer; 
     }
 
     // Update is called once per frame
     void Update()
     {
-        /*
-        if (FindObjectOfType<CubeBoss>() != null)
+        special_shot_cd.text = "" + (int)player.GetSpecialShootCd();
+        if(special_shot_cd.text == "0")
         {
-            cubeboss_hp_bar.gameObject.SetActive(true);
-            cube_boss = FindObjectOfType<CubeBoss>();
-            cubeboss_hp_bar.maxValue = cube_boss.GetMaxHP() - 1;
-            cubeboss_hp_bar.value = cube_boss.current_HP - 1 ;
+            special_shot_cross.SetActive(false);
         }
         else
         {
-            cubeboss_hp_bar.gameObject.SetActive(false);
+            special_shot_cross.SetActive(true);
         }
-        */
+
+
         if (cube_boss != null)
         {
             if (cube_boss.isActiveAndEnabled)
@@ -89,30 +91,38 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
             }
 
         }
-
-       
         if (cube_boss.GetHP()  == 0)
         {
             if (cube_boss.GetStatus()==false)
             {
                 gameWin.SetActive(true);
+                finalScore.text = " " + player.GetScore();
             }
-
-
         }
 
+        if(ennemy_manager.GetSpawnState() == EnnemyManager.SpawnState.BOSS)
+        {
+            warningPanel.SetActive(true);
+            if(cd_timer <= 0)
+            {
+                warningPanel.SetActive(false);
+            }
+            else
+            {
+                cd_timer -= Time.deltaTime;
+            }
+        }
+
+        
     }
 
     private void HandlingHPChange(int hp)
     {
-        //HP_bar_UI.value -= hp;
         hp_bar.value = player.GetHP() - hp;
-        //Debug.Log("Bar value : " + hp_bar.value  + "HP PLAYER : " + player.GetHP() + "MAX HP : " + player.GetMaxHP());
     }
 
     private void HandlingBossHPChange(int hp)
     {
-        //HP_bar_UI.value -= hp;
         cubeboss_hp_bar.value = cube_boss.GetHP() - hp;
         //Debug.Log("Bar value : " + hp_bar.value  + "HP PLAYER : " + player.GetHP() + "MAX HP : " + player.GetMaxHP());
     }
@@ -135,21 +145,6 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
     {
        
     }
-
-
-    /*
-    public void ResetLevel()
-    {
-        //Scene scene = SceneManager.GetActiveScene();
-        //SceneManager.LoadScene(scene.name);
-        GameManager.Instance.ResetLevel();
-    }
-
-
-    
-
-    */
-
 
     public void TogglePausePanel(bool pause)
     {
