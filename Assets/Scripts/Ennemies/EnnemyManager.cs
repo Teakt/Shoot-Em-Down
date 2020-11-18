@@ -156,4 +156,9 @@ public class EnnemyManager : MonoBehaviour
         Transform _sp = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)]; 
         Instantiate(_ennemy, _sp.position, _sp.rotation);
     }
+
+    public SpawnState GetSpawnState()
+    {
+        return state;
+    }
 }

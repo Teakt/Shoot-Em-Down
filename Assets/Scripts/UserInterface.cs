@@ -30,6 +30,14 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
     [SerializeField] private Text special_shot_text;
     [SerializeField] private Text special_shot_cd;
     [SerializeField] private GameObject special_shot_cross;
+    [SerializeField] private GameObject warningPanel;
+
+    [SerializeField] private Text finalScore;
+
+    float timer = 3f;
+    float cd_timer;
+
+    [SerializeField] private EnnemyManager ennemy_manager;
     protected override void Awake()
     {
         player.OnHPChange += HandlingHPChange;
@@ -53,6 +61,8 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
 
         cubeboss_hp_bar.maxValue = cube_boss.GetMaxHP();
         cubeboss_hp_bar.value = cube_boss.GetMaxHP();
+
+        cd_timer = timer; 
     }
 
     // Update is called once per frame
@@ -86,8 +96,24 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
             if (cube_boss.GetStatus()==false)
             {
                 gameWin.SetActive(true);
+                finalScore.text = " " + player.GetScore();
             }
         }
+
+        if(ennemy_manager.GetSpawnState() == EnnemyManager.SpawnState.BOSS)
+        {
+            warningPanel.SetActive(true);
+            if(cd_timer <= 0)
+            {
+                warningPanel.SetActive(false);
+            }
+            else
+            {
+                cd_timer -= Time.deltaTime;
+            }
+        }
+
+        
     }
 
     private void HandlingHPChange(int hp)

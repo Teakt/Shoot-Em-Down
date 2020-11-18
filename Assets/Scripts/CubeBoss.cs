@@ -178,6 +178,7 @@ public class CubeBoss : Entity
             if (boss_state == BossState.WAITING)
             {
                 MoveToInitPosBis();
+                ChargeAttack();
                 Vector3 screenPos = m_MainCamera.WorldToScreenPoint(transform.position);
                 // Start spawning wave
                 if (screenPos.x > (m_width / 2) - 1 && screenPos.x <= (m_width / 2) + 1 && screenPos.y > m_height - 0.25 * m_height - 1 && screenPos.y <= m_height - 0.25 * m_height + 1)
