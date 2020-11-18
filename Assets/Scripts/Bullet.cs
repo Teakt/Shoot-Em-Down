@@ -86,7 +86,18 @@ public class Bullet : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        
+        if (collision.rigidbody.tag == "CubeBoss")
+        {
+            //UnityEngine.Debug.Log(collision.rigidbody.tag);
+            score += 1000;
+            if (OnBulletHit != null)
+            {
+                OnBulletHit(score);
+            }
+            Destroy(this.gameObject);
+        }
+
+
 
 
         /* // Play a sound if the colliding objects had a big impact.

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class CubeBoss : Entity
 {
 
@@ -47,30 +48,47 @@ public class CubeBoss : Entity
     public float timeBetweenEachState = 3f;
     [SerializeField] private float timeBetweenStateCountdown ;
 
+    public float timeBetweenEachCharge = 3f;
+    [SerializeField] private float timeBetweenChargeCountdown;
+
     // Start is called before the first frame update
     [SerializeField] private BossState boss_state = BossState.APPEARING;
     [SerializeField] private BossPhases boss_phase = BossPhases.PHASE1;
 
     [SerializeField] private float MovSpeed = 10f;
+    [SerializeField] private float rotateSpeed = 80f;
+    [SerializeField] private float chargePower = 80f;
+
+    [SerializeField] private bool boss_status ;
     /*-----------------------------------------------------------------------------*/
     public delegate void OnHPChangeEvent(int hp);
     public event OnHPChangeEvent OnHPChange;
 
 
     public Transform[] corners;
+    bool onetime = false;
+
+    Vector3 fixed_direction;
+    private Rigidbody rb;
+    private MeshRenderer mesh_renderer;
+    public Material mat_boss;
 
 
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
+        mesh_renderer = GetComponent<MeshRenderer>();
         m_MainCamera = Camera.main;
         m_width = Screen.width;
         m_height = Screen.height;
 
-       speed = 15f;
+       
 
         timeBetweenStateCountdown = timeBetweenEachState;
         timeBetweenShotCountdown = timeBetweenEachShot;
+
+        boss_status = true;
+        
     }
 
     // Update is called once per frame
@@ -97,6 +115,7 @@ public class CubeBoss : Entity
 
         if(boss_phase == BossPhases.PHASE1)
         {
+            rb.constraints = RigidbodyConstraints.FreezePosition;
 
             if (this.current_HP <= this.GetMaxHP() / 2)
             {
@@ -107,7 +126,7 @@ public class CubeBoss : Entity
             {
                 if (boss_state == BossState.WAITING)
                 {
-                    StartCoroutine(MoveRandom());
+                    MoveToInitPos();
 
                     // Start spawning wave
                     StartCoroutine(WaitingState());
@@ -137,11 +156,13 @@ public class CubeBoss : Entity
 
         if(boss_phase == BossPhases.PHASE2)
         {
+
+            rb.constraints = RigidbodyConstraints.FreezePosition;
             transform.Rotate(Vector3.up * 50 * Time.deltaTime, Space.Self);
             if (boss_state == BossState.WAITING)
             {
                 //this.transform.position = new Vector3(transform.position.x + UnityEngine.Random.Range(speed * Time.deltaTime, -speed * Time.deltaTime), transform.position.y, transform.position.z);
-                MoveRandom();
+                MoveToInitPos();
                 // Start spawning wave
                 StartCoroutine(WaitingState());
             }
@@ -177,39 +198,57 @@ public class CubeBoss : Entity
 
         if (boss_phase == BossPhases.PHASE3)
         {
-            transform.Rotate(Vector3.forward * 80 * Time.deltaTime, Space.Self);
-            transform.localScale.Set(transform.localScale.x * 1.5f, transform.localScale.y * 1.5f, transform.localScale.z * 1.5f);
+            mesh_renderer.material = mat_boss;
+            rb.constraints = RigidbodyConstraints.None;
+            
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            rb.constraints = RigidbodyConstraints.FreezePositionZ;
+            //rotateSpeed = 80f;
+            transform.Rotate(Vector3.forward * rotateSpeed * Time.deltaTime, Space.Self);
+            if (!onetime)
+            {
+                transform.localScale += new Vector3(7, 7, 7);
+                onetime = true;
+                boss_state = BossState.WAITING;
+            }
+           
+            
             if (boss_state == BossState.WAITING)
             {
                 //this.transform.position = new Vector3(transform.position.x + UnityEngine.Random.Range(speed * Time.deltaTime, -speed * Time.deltaTime), transform.position.y, transform.position.z);
-                MoveRandom();
+                MoveToInitPosBis();
+                Vector3 screenPos = m_MainCamera.WorldToScreenPoint(transform.position);
                 // Start spawning wave
-                StartCoroutine(WaitingState());
-            }
+                if (screenPos.x > (m_width / 2) - 1 && screenPos.x <= (m_width / 2) + 1 && screenPos.y > m_height - 0.25 * m_height - 1 && screenPos.y <= m_height - 0.25 * m_height + 1)
+                {
+                    boss_state = BossState.ATTACKING;
+                }
 
+            }
+            
 
             if (boss_state == BossState.ATTACKING)
             {
-
-                if (timeBetweenShotCountdown <= 0)
+                if (timeBetweenChargeCountdown <= 0)
                 {
+                    ChargeAttack();
                     Corner_Shoot();
-                    Corner_Spawn();
-                    timeBetweenShotCountdown = timeBetweenEachShot;
+                    timeBetweenChargeCountdown = timeBetweenEachCharge;
                 }
                 else
                 {
-                    timeBetweenShotCountdown -= Time.deltaTime;
+                    timeBetweenChargeCountdown -= Time.deltaTime;
                 }
+                
 
             }
 
 
-            if (current_HP <= 0)  // If the player has nno HP , he dies 
+            if (current_HP  <= 0)  // If the player has nno HP , he dies 
             {
-                this.setHP(GetMaxHP());
-                boss_state = BossState.APPEARING;
-                boss_phase = BossPhases.PHASE3;
+                boss_status= false;
+                Destroy(this.gameObject);
+                
             }
 
 
@@ -259,9 +298,55 @@ public class CubeBoss : Entity
         {
             boss_state = BossState.WAITING;
         }
-        
-       
-        
+        Vector3 direction = target.transform.position - rb.position;
+        fixed_direction = direction;
+
+    }
+
+    void MoveToInitPosBis()
+    {
+        // Pos of the player to the camera
+        Vector3 screenPos = m_MainCamera.WorldToScreenPoint(transform.position);
+
+        if (screenPos.y > m_height - 0.25 * m_height)
+        {
+            //Debug.Log("IF");
+            if (screenPos.x < m_width / 2)
+            {
+                this.transform.position = new Vector3(transform.position.x + (m_VerticalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
+            }
+            else
+            {
+                this.transform.position = new Vector3(transform.position.x - (m_VerticalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
+            }
+            this.transform.position = new Vector3(transform.position.x, transform.position.y - (m_VerticalSpeed * Time.deltaTime), transform.position.z);
+
+        }
+        else
+        {
+            //Debug.Log("ELSE");
+            if (screenPos.x < m_width / 2)
+            {
+                //Debug.Log("ELSE1" + screenPos.x + " width / 2 : " + m_width /2);
+                this.transform.position = new Vector3(transform.position.x + (m_VerticalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
+            }
+            else
+            {
+                //Debug.Log("ELS2E2");
+                this.transform.position = new Vector3(transform.position.x - (m_VerticalSpeed * Time.deltaTime), transform.position.y, transform.position.z);
+            }
+
+
+            this.transform.position = new Vector3(transform.position.x, transform.position.y + (m_VerticalSpeed * Time.deltaTime), transform.position.z);
+        }
+
+        if (screenPos.x > (m_width / 2) - 1 && screenPos.x <= (m_width / 2) + 1 && screenPos.y > m_height - 0.25 * m_height - 1 && screenPos.y <= m_height - 0.25 * m_height + 1)
+        {
+            boss_state = BossState.ATTACKING;
+        }
+        Vector3 direction = target.transform.position - rb.position;
+        fixed_direction = direction;
+
     }
 
     IEnumerator WaitingState()
@@ -335,6 +420,34 @@ public class CubeBoss : Entity
         
 
     }
+
+    private void ChargeAttack()
+    {
+        rotateSpeed = 270f;
+        //Taunt 
+        Vector3 direction = target.transform.position - this.transform.position;
+
+        
+        this.transform.LookAt(target.transform);
+
+        rb.AddForce(fixed_direction * chargePower * 2 * Time.deltaTime);
+
+        if (timeBetweenChargeCountdown <= 0)
+        {
+            boss_state = BossState.WAITING;
+            timeBetweenChargeCountdown = timeBetweenEachCharge;
+        }
+        else
+        {
+            timeBetweenChargeCountdown -= Time.deltaTime;
+        }
+
+       
+
+
+
+    }
+
     private void GoRight()
     {
         this.transform.position = new Vector3(transform.position.x + (MovSpeed * Time.deltaTime), transform.position.y, transform.position.z);
@@ -386,5 +499,15 @@ public class CubeBoss : Entity
          if (collision.relativeVelocity.magnitude > 2)
              audioSource.Play();
              */
+    }
+
+
+    public int GetHP() // Egalement, il sera nécessaire de créer une propriété public qui permet de récupérer la valeur max des PVs du vaisseau. 
+    {
+        return current_HP;
+    }
+
+    public bool GetStatus(){
+        return boss_status;
     }
 }

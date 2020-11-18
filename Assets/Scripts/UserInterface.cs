@@ -10,7 +10,9 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
     //private Slider HP_bar_UI;
     // Start is called before the first frame update
     [SerializeField] private GameObject gameOver;
+    [SerializeField] private GameObject gameWin;
     [SerializeField] private Button playAgain_button;
+    [SerializeField] private Button playAgain_button2;
     [SerializeField] private Text score_text;
     [SerializeField] private Slider hp_bar;
 
@@ -35,9 +37,14 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
         
         player.OnHPChange += HandlingHPChange;
         player.OnHPChange += HandlingGameOver;
+
+        cube_boss.OnHPChange += HandlingBossHPChange;
+        cube_boss.OnHPChange += HandlingGameWin;
+
         player.OnScoreChange += HandlingScoreChange;
 
         playAgain_button.onClick.AddListener(GameManager.Instance.ResetLevel);
+        playAgain_button2.onClick.AddListener(GameManager.Instance.ResetLevel);
         pause_button.onClick.AddListener(GameManager.Instance.Play);
 
 
@@ -47,7 +54,9 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
         hp_bar.maxValue = player.GetMaxHP() ;
         hp_bar.value = player.GetMaxHP();
 
-        
+        cubeboss_hp_bar.maxValue = cube_boss.GetMaxHP();
+        cubeboss_hp_bar.value = cube_boss.GetMaxHP();
+
         //float test = 3f;
         // bar.localScale = new Vector3(test, 1f);
     }
@@ -55,6 +64,7 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
     // Update is called once per frame
     void Update()
     {
+        /*
         if (FindObjectOfType<CubeBoss>() != null)
         {
             cubeboss_hp_bar.gameObject.SetActive(true);
@@ -66,13 +76,44 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
         {
             cubeboss_hp_bar.gameObject.SetActive(false);
         }
-          
+        */
+        if (cube_boss != null)
+        {
+            if (cube_boss.isActiveAndEnabled)
+            {
+                cubeboss_hp_bar.gameObject.SetActive(true);
+            }
+            else
+            {
+                cubeboss_hp_bar.gameObject.SetActive(false);
+            }
+
+        }
+
+       
+        if (cube_boss.GetHP()  == 0)
+        {
+            if (cube_boss.GetStatus()==false)
+            {
+                gameWin.SetActive(true);
+            }
+
+
+        }
+
     }
 
     private void HandlingHPChange(int hp)
     {
         //HP_bar_UI.value -= hp;
         hp_bar.value = player.GetHP() - hp;
+        //Debug.Log("Bar value : " + hp_bar.value  + "HP PLAYER : " + player.GetHP() + "MAX HP : " + player.GetMaxHP());
+    }
+
+    private void HandlingBossHPChange(int hp)
+    {
+        //HP_bar_UI.value -= hp;
+        cubeboss_hp_bar.value = cube_boss.GetHP() - hp;
         //Debug.Log("Bar value : " + hp_bar.value  + "HP PLAYER : " + player.GetHP() + "MAX HP : " + player.GetMaxHP());
     }
 
@@ -88,6 +129,11 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
         {
             gameOver.SetActive(true);
         }
+    }
+
+    private void HandlingGameWin(int hp)
+    {
+       
     }
 
 

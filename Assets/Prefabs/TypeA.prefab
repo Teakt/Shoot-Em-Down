@@ -125,7 +125,7 @@ MonoBehaviour:
   max_HP: 5
   m_height: 315
   delay_before_teleportation: 5
-  travel_distance: 1
-  oscillation: 3
+  travel_distance: 2
+  oscillation: 5
   ennemybullet_prefab: {fileID: 1908890201545072088, guid: b2027f37d1411f74fb39794fced4e634,
     type: 3}

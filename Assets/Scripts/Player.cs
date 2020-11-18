@@ -180,6 +180,20 @@ public class Player : Entity
             UnityEngine.Debug.Log("Player Current HP : " + current_HP);
         }
 
+        if (collision.rigidbody.tag == "CubeBoss")
+        {
+            //UnityEngine.Debug.Log(collision.rigidbody.tag);
+            // Destroy(collision.gameObject); // Ennmey dies while crashing into the player
+            //current_HP -= 1;
+            if (OnHPChange != null)
+            {
+                OnHPChange(5);
+            }
+            this.loseHP(5);
+
+            //UnityEngine.Debug.Log("Player Current HP : " + current_HP);
+        }
+
         if (collision.rigidbody.tag == "EnnemyBullet")
         {
             //UnityEngine.Debug.Log(collision.rigidbody.tag);
