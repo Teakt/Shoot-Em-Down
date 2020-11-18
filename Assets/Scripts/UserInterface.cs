@@ -13,11 +13,16 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
     [SerializeField] private Button playAgain_button;
     [SerializeField] private Text score_text;
     [SerializeField] private Slider hp_bar;
+
+    [SerializeField] private Slider cubeboss_hp_bar;
+
     [SerializeField] private Player player;
 
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private Button pause_button;
 
+
+    [SerializeField] private CubeBoss cube_boss;
     protected override void Awake()
     {
         /*
@@ -41,6 +46,8 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
     {
         hp_bar.maxValue = player.GetMaxHP() ;
         hp_bar.value = player.GetMaxHP();
+
+        
         //float test = 3f;
         // bar.localScale = new Vector3(test, 1f);
     }
@@ -48,7 +55,18 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
     // Update is called once per frame
     void Update()
     {
-        
+        if (FindObjectOfType<CubeBoss>() != null)
+        {
+            cubeboss_hp_bar.gameObject.SetActive(true);
+            cube_boss = FindObjectOfType<CubeBoss>();
+            cubeboss_hp_bar.maxValue = cube_boss.GetMaxHP() - 1;
+            cubeboss_hp_bar.value = cube_boss.current_HP - 1 ;
+        }
+        else
+        {
+            cubeboss_hp_bar.gameObject.SetActive(false);
+        }
+          
     }
 
     private void HandlingHPChange(int hp)
