@@ -34,6 +34,8 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
 
     [SerializeField] private Text finalScore;
 
+    public AudioSource deafeatsound;
+
     float timer = 3f;
     float cd_timer;
 
@@ -135,8 +137,9 @@ public class UserInterface : MonoBehaviourSingleton<UserInterface>
 
     private void HandlingGameOver(int hp)
     {
-        if(player.GetHP() - hp == 0)
+        if(player.GetHP() - hp <= 0)
         {
+            deafeatsound.Play();
             gameOver.SetActive(true);
         }
     }
