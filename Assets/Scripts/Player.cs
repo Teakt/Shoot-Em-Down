@@ -39,8 +39,6 @@ public class Player : Entity
     [Header("[Sound Settings]")]
     public AudioSource audioSource;
 
-    Stopwatch stopWatch = new Stopwatch();
-
     Vector3 shootDirection;
 
     public int score_Player { get; set; }
@@ -66,10 +64,6 @@ public class Player : Entity
     {
         m_width = Screen.width;
         m_height = Screen.height;
-        
-        characterController = GetComponent<CharacterController>();
-        
-
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -238,11 +232,7 @@ public class Player : Entity
         else
         {
             stopWatch.Start();
-        }
-        GameObject instanciated_prefab = Instantiate(bullet_type2_prefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
-        instanciated_prefab.GetComponent<Bullet_Type2>().ShootWithDirection(shootDirection, shooting_power_type2);
-        instanciated_prefab.GetComponent<Bullet_Type2>().OnBulletHit += OnBulletHitPlayer; // suscribe to Bullet event OnHitBulelt
-        
+        }      
     }
 
 }

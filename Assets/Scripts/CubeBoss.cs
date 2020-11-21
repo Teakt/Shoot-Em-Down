@@ -60,7 +60,11 @@ public class CubeBoss : Entity
     /*-----------------------------------------------------------------------------*/
     public delegate void OnHPChangeEvent(int hp);
     public event OnHPChangeEvent OnHPChange;
-   
+    public AudioSource Bang;
+    public AudioSource State_two_Sound;
+    public AudioSource Laugh;
+    public AudioSource FinalState;
+
     bool onetime = false;
 
     Vector3 fixed_direction;
@@ -70,6 +74,7 @@ public class CubeBoss : Entity
 
     void Start()
     {
+        Laugh.Play();
         rb = GetComponent<Rigidbody>();
         mesh_renderer = GetComponent<MeshRenderer>();
         m_MainCamera = Camera.main;
@@ -101,7 +106,9 @@ public class CubeBoss : Entity
 
             if (this.current_HP <= this.GetMaxHP() / 2)
             {
-                boss_phase = BossPhases.PHASE2; 
+                State_two_Sound.Play();
+                boss_phase = BossPhases.PHASE2;
+                
             }
 
             if (timeBetweenStateCountdown <= 0)
@@ -116,6 +123,7 @@ public class CubeBoss : Entity
                 {
                     if( timeBetweenShotCountdown <= 0)
                     {
+                        Bang.Play();
                         Corner_Shoot();
                         timeBetweenShotCountdown = timeBetweenEachShot;
                     }
@@ -146,6 +154,7 @@ public class CubeBoss : Entity
             {
                 if (timeBetweenShotCountdown <= 0)
                 {
+                    Bang.Play();
                     Corner_Shoot();
                     Corner_Spawn();
                     timeBetweenShotCountdown = timeBetweenEachShot;
@@ -157,6 +166,7 @@ public class CubeBoss : Entity
             }
             if (current_HP <= 0)  // If the player has nno HP , he dies 
             {
+                FinalState.Play();
                 this.setHP(GetMaxHP());
                 boss_state = BossState.APPEARING;
                 boss_phase = BossPhases.PHASE3;
