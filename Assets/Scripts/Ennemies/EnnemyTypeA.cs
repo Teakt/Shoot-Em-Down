@@ -11,6 +11,8 @@ public class EnnemyTypeA : Ennemy
 
     private Camera m_MainCamera;
 
+    
+
     [Header("[Movements Settings]")]
     [SerializeField] private float delay_before_teleportation;
     [SerializeField] private float travel_distance;
@@ -23,6 +25,8 @@ public class EnnemyTypeA : Ennemy
     [SerializeField] private GameObject ennemybullet_prefab;
 
     Stopwatch stopWatch = new Stopwatch(); // for the teleportation of the EnnemyA
+
+    
 
     // Start is called before the first frame update
     public override void Awake()
@@ -81,6 +85,7 @@ public class EnnemyTypeA : Ennemy
 
     public override void Shoot()
     {
+            
             GameObject instanciated_prefab = Instantiate(ennemybullet_prefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
             Vector3 direction = target.transform.position - transform.position;
             instanciated_prefab.GetComponent<EnnemyBullet>().ShootWithDirection(direction.normalized);

@@ -24,6 +24,7 @@ public class EnnemyTypeB : Ennemy
     [SerializeField] private float m_height = Screen.height;
 
     private Player target;
+    
 
     Stopwatch stopWatch = new Stopwatch(); // for the teleportation of the EnnemyA
 
