@@ -25,6 +25,10 @@ Windows:
 edit autoexec.bat
 ```
 
+## Screenshots
+
+![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
+
 ## Usage example
 
 A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
