@@ -12,24 +12,12 @@ Shoot-Em-Down is a simple Shoot'em up style game, you have to beat a wave of enn
 ![](header.png)
 
 ## Installation
-
-OS X & Linux:
-
-```sh
-npm install my-crazy-module --save
-```
-
-Windows:
-
-```sh
-edit autoexec.bat
-```
-
+You can dowload a version of the game via the Releases -> [Last Version of the Game](https://github.com/Teakt/Shoot-Em-Down/files/5680753/ShootEmDOwn.zip)
 ## Screenshots
 
 
-![Alt Text](https://github.com/Teakt/Shoot-Em-Down/blob/master/waves_gif.gif)
-<img src="https://github.com/Teakt/Shoot-Em-Down/blob/master/waves_gif.gif" width="1280" height="720" />
+
+<img src="https://github.com/Teakt/Shoot-Em-Down/blob/master/waves_gif.gif" width="640" height="360" />
 <img src="https://github.com/Teakt/Shoot-Em-Down/blob/master/waves_gif.gif" width="640" height="360" />
 ## Usage example
 
