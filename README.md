@@ -28,8 +28,8 @@ edit autoexec.bat
 ## Screenshots
 
 
-![Alt Text](https://github.com/Teakt/Shoot-Em-Down/blob/master/waves_gif.gif width="1280" height="720")
-
+![Alt Text](https://github.com/Teakt/Shoot-Em-Down/blob/master/waves_gif.gif)
+<img src="https://github.com/Teakt/Shoot-Em-Down/blob/master/waves_gif.gif" width="1280" height="720" />
 ## Usage example
 
 A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
