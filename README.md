@@ -23,7 +23,7 @@ Here is a gif showing a wave phase :
 
 And here a gif showing the boss phase : 
 
-<img src="https://github.com/Teakt/Shoot-Em-Down/blob/master/waves_gif.gif" width="640" height="360" />
+<img src="https://github.com/Teakt/Shoot-Em-Down/blob/master/boss_gif_shootemdown.gif" width="640" height="360" />
 
 
 ## Release History
