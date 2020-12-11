@@ -28,7 +28,7 @@ edit autoexec.bat
 ## Screenshots
 
 
-![Alt Text](https://imgflip.com/gif/4py732)
+![Alt Text](https://github.com/Teakt/Shoot-Em-Down/blob/master/waves_gif.gif)
 
 ## Usage example
 
